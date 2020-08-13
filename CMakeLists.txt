@@ -15,7 +15,11 @@ endif(WIN32)
 
 link_directories(${CMAKE_SOURCE_DIR}/lib)
 
-list(APPEND CMAKE_CXX_FLAGS "-std=c++11")
+if(APPLE)
+  list(APPEND CMAKE_CXX_FLAGS "-std=c++11 -Wno-c++11-narrowing")
+else()
+  list(APPEND CMAKE_CXX_FLAGS "-std=c++11")
+endif(APPLE)
 
 # find the required packages
 find_package(GLM REQUIRED)
@@ -46,8 +50,9 @@ elseif(APPLE)
   FIND_LIBRARY(OpenGL_LIBRARY OpenGL)
   FIND_LIBRARY(IOKit_LIBRARY IOKit)
   FIND_LIBRARY(CoreVideo_LIBRARY CoreVideo)
+  FIND_LIBRARY(Freetype_LIBRARY freetype)
   MARK_AS_ADVANCED(COCOA_LIBRARY OpenGL_LIBRARY)
-  SET(APPLE_LIBS ${COCOA_LIBRARY} ${IOKit_LIBRARY} ${OpenGL_LIBRARY} ${CoreVideo_LIBRARY})
+  SET(APPLE_LIBS ${COCOA_LIBRARY} ${IOKit_LIBRARY} ${OpenGL_LIBRARY} ${CoreVideo_LIBRARY} ${Freetype_LIBRARY})
   SET(APPLE_LIBS ${APPLE_LIBS} ${GLFW3_LIBRARY} ${ASSIMP_LIBRARY})
   set(LIBS ${LIBS} ${APPLE_LIBS})
 else()
